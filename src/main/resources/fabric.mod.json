@@ -3,15 +3,15 @@
 	"id": "revivegraves",
 	"version": "${version}",
 	"name": "ReviveGraves",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "W Mod!",
 	"authors": [
-		"Me!"
+		"ProgrammieRIN!"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/revivegraves/icon.png",
 	"environment": "*",
 	"entrypoints": {
