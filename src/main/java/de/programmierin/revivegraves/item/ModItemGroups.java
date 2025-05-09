@@ -11,18 +11,16 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ModItemGroups {
-
-    public static final ItemGroup REVIVEGRAVES_GROUP = Registry.register(Registries.ITEM_GROUP,
-            Identifier.of(ReviveGraves.MOD_ID, "pink_garnet_blocks"),
+    public static final ItemGroup REVIVEGRAVES_ITEMS_GROUP = Registry.register(Registries.ITEM_GROUP,
+            Identifier.of(ReviveGraves.MOD_ID, "revivegraves_items"),
             FabricItemGroup.builder().icon(() -> new ItemStack(ModItems.REVIVE_TOKEN))
                     .displayName(Text.translatable("ReviveGraves"))
                     .entries((displayContext, entries) -> {
 
-                        entries.add(ModBlocks.GRAVESTONE);
                         entries.add(ModItems.REVIVE_TOKEN);
+                        entries.add(ModBlocks.GRAVESTONE);
 
                     }).build());
-
 
     public static void registerItemGroups() {
         ReviveGraves.LOGGER.info("Registering Item Groups for " + ReviveGraves.MOD_ID);

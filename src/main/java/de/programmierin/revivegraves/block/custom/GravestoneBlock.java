@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -24,6 +25,7 @@ import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.UUID;
 
 public class GravestoneBlock extends HorizontalFacingBlock implements BlockEntityProvider {
@@ -95,7 +97,13 @@ public class GravestoneBlock extends HorizontalFacingBlock implements BlockEntit
             double x = pos.getX() + 0.5;
             double y = pos.getY() + 1.0;
             double z = pos.getZ() + 0.5;
-            dead.teleport(serverWorld, x, y, z, dead.getYaw(), dead.getPitch());
+            dead.teleport(
+                    serverWorld,
+                    x, y, z,
+                    EnumSet.noneOf(PositionFlag.class),  // keine speziellen Rotations-Flags
+                    dead.getYaw(), dead.getPitch(),
+                    false                               // onGround = false
+            );
             dead.changeGameMode(GameMode.SURVIVAL);
 
             serverWorld.spawnParticles(

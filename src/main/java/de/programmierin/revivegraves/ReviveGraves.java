@@ -82,5 +82,6 @@ public class ReviveGraves implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModDataComponentTypes.registerDataComponentTypes();
 		ModEntities.registerModEntities();
+
 	}
 }

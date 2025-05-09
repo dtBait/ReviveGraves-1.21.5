@@ -4,11 +4,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -46,8 +49,9 @@ public class GravestoneBlockEntity extends BlockEntity {
         if (player == null) return;
         String name = player.getGameProfile().getName();
 
+        // Baue dein NBT-Tag mit allen gewünschten Flags
         NbtCompound tag = new NbtCompound();
-        tag.putString("CustomName",        "{\"text\":\"" + name + "\"}");
+        tag.putString("CustomName",        Text.literal(name).toString());
         tag.putBoolean("CustomNameVisible", true);
         tag.putBoolean("Invisible",         true);
         tag.putBoolean("NoGravity",         true);
@@ -56,13 +60,25 @@ public class GravestoneBlockEntity extends BlockEntity {
         tag.putBoolean("NoBasePlate",       true);
         tag.putBoolean("Marker",            true);
 
-        ArmorStandEntity stand = EntityType.ARMOR_STAND.create(world);
+        // Erzeuge den ArmorStand mit Initializer, der dein NBT liest
+        ArmorStandEntity stand = EntityType.ARMOR_STAND.create(
+                world,
+                entity -> entity.readNbt(tag),    // hier setzt er Small, NoBasePlate etc.
+                pos,
+                SpawnReason.TRIGGERED,
+                true,   // alignPosition (zentriert auf dem Block)
+                false   // invertFacing
+        );
         if (stand == null) return;
-        stand.readNbt(tag);
-        stand.setInvisible(true);
 
-        BlockState blockState = world.getBlockState(pos);
-        Direction facing = blockState.get(HorizontalFacingBlock.FACING);
+        // CustomName wurde durch NBT gesetzt, falls du Text.literal benutzt,
+        // kannst du es hier alternativ so setzen:
+        stand.setCustomName(Text.literal(name));
+        stand.setCustomNameVisible(true);
+
+        // Position berechnen wie gehabt
+        BlockState bs = world.getBlockState(pos);
+        Direction facing = bs.get(HorizontalFacingBlock.FACING);
         double offset = 0.25;
         double dx = -facing.getOffsetX() * offset;
         double dz = -facing.getOffsetZ() * offset;
@@ -72,8 +88,10 @@ public class GravestoneBlockEntity extends BlockEntity {
         double z = pos.getZ() + 0.5 + dz;
         stand.refreshPositionAndAngles(x, y, z, 0f, 0f);
 
+        // Jetzt wirklich in die Welt spawnen
         world.spawnEntity(stand);
 
+        // UUID merken und speichern
         this.hologram = stand.getUuid();
         markDirty();
     }
@@ -81,14 +99,31 @@ public class GravestoneBlockEntity extends BlockEntity {
     @Override
     public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         super.writeNbt(nbt, registries);
-        if (owner != null) nbt.putUuid("Owner", owner);
-        if (hologram != null) nbt.putUuid("Hologram", hologram);
+        if (owner != null) {
+            nbt.putString("Owner", owner.toString());
+        }
+        if (hologram != null) {
+            nbt.putString("Hologram", hologram.toString());
+        }
     }
 
     @Override
     public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         super.readNbt(nbt, registries);
-        if (nbt.containsUuid("Owner"))    owner    = nbt.getUuid("Owner");
-        if (nbt.containsUuid("Hologram")) hologram = nbt.getUuid("Hologram");
+        if (nbt.contains("Owner")) {
+            // entpacke das Optional<String> mit orElseThrow()
+            owner = UUID.fromString(
+                    nbt.getString("Owner")
+                            .orElseThrow(() -> new IllegalStateException("Owner-UUID fehlt im NBT"))
+            );
+        }
+        if (nbt.contains("Hologram")) {
+            hologram = UUID.fromString(
+                    nbt.getString("Hologram")
+                            .orElseThrow(() -> new IllegalStateException("Hologram-UUID fehlt im NBT"))
+            );
+        }
     }
+
+
 }
