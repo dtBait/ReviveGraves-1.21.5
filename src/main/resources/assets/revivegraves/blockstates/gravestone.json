@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "revivegraves:block/gravestone",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "revivegraves:block/gravestone"
+    },
+    "facing=south": {
+      "model": "revivegraves:block/gravestone",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "revivegraves:block/gravestone",
+      "y": 270
+    }
+  }
+}

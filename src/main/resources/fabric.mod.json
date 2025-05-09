@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "revivegraves",
+	"version": "${version}",
+	"name": "ReviveGraves",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/revivegraves/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"de.programmierin.revivegraves.ReviveGraves"
+		],
+		"fabric-datagen": [
+			"de.programmierin.revivegraves.ReviveGravesDataGenerator"
+		]
+	},
+	"mixins": [
+		"revivegraves.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
