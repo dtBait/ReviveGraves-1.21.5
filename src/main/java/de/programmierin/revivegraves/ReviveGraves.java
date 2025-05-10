@@ -1,5 +1,6 @@
 package de.programmierin.revivegraves;
 
+import de.programmierin.revivegraves.item.ModItemGroups;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
@@ -31,6 +32,7 @@ public class ReviveGraves implements ModInitializer {
 	public void onInitialize() {
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
+		ModItemGroups.registerItemGroups();
 
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
 			if (!(entity instanceof ServerPlayerEntity player)) return;

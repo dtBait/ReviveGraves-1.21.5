@@ -21,7 +21,7 @@ public class ModItems {
     public static void registerModItems(){
         ReviveGraves.LOGGER.info("Registering mod items for " + ReviveGraves.MOD_ID);
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
-            entries.add(REVIVE_TOKEN);
+
         });
     }
 }
