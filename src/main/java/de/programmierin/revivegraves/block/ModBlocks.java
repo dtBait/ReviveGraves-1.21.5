@@ -46,7 +46,7 @@ public class ModBlocks {
         ReviveGraves.LOGGER.info("Registering Mod Blocks for " + ReviveGraves.MOD_ID);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
-
+        entries.add(GRAVESTONE);
         });
     }
 }
